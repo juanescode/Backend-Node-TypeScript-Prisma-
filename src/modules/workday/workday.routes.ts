@@ -1,27 +1,14 @@
 import { Router } from "express";
-import { z } from "zod";
 import { WorkdayService } from "./workday.service.js";
+import { endWorkdaySchema, startWorkdaySchema, statusParamsSchema } from "./workday.schemas.js";
 
 export const workdayRoutes = Router();
 
 const service = new WorkdayService();
 
-const startSchema = z.object({
-  workerCode: z.string().min(3).max(30),
-  workerName: z.string().min(2).max(100).optional(),
-});
-
-const endSchema = z.object({
-  workerCode: z.string().min(3).max(30),
-});
-
-const statusParamsSchema = z.object({
-  workerCode: z.string().min(3).max(30),
-});
-
 workdayRoutes.post("/start", async (req, res, next) => {
   try {
-    const input = startSchema.parse(req.body);
+    const input = startWorkdaySchema.parse(req.body);
     const data = await service.start(input);
 
     res.status(201).json({
@@ -35,7 +22,7 @@ workdayRoutes.post("/start", async (req, res, next) => {
 
 workdayRoutes.post("/end", async (req, res, next) => {
   try {
-    const input = endSchema.parse(req.body);
+    const input = endWorkdaySchema.parse(req.body);
     const data = await service.end(input);
 
     res.status(200).json({

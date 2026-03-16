@@ -1,15 +1,7 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../shared/errors/AppError.js";
 import { toColombiaDateTime } from "../../shared/utils/datetime.js";
-
-type StartWorkdayInput = {
-  workerCode: string;
-  workerName?: string | undefined;
-};
-
-type EndWorkdayInput = {
-  workerCode: string;
-};
+import type { EndWorkdayInput, StartWorkdayInput } from "./workday.schemas.js";
 
 const calculateSeconds = (start: Date, end: Date): number => {
   const diffMs = end.getTime() - start.getTime();
@@ -32,7 +24,7 @@ const toWorkdayResponse = (workday: {
 
 export class WorkdayService {
   async start(input: StartWorkdayInput) {
-    const workerCode = input.workerCode.trim();
+    const workerCode = input.workerCode.trim().toUpperCase();
     const workerName = input.workerName?.trim();
 
     let worker = await prisma.worker.findUnique({ where: { code: workerCode } });
@@ -44,6 +36,12 @@ export class WorkdayService {
           name: workerName && workerName.length > 0 ? workerName : `Trabajador ${workerCode}`,
         },
       });
+    } else if (workerName && worker.name.toLowerCase() !== workerName.toLowerCase()) {
+      throw new AppError(
+        "El código ya está asociado a otro nombre de trabajador.",
+        409,
+        "WORKER_IDENTITY_MISMATCH",
+      );
     }
 
     const activeWorkday = await prisma.workday.findFirst({
@@ -78,7 +76,7 @@ export class WorkdayService {
   }
 
   async end(input: EndWorkdayInput) {
-    const workerCode = input.workerCode.trim();
+    const workerCode = input.workerCode.trim().toUpperCase();
 
     const worker = await prisma.worker.findUnique({ where: { code: workerCode } });
 
@@ -124,7 +122,7 @@ export class WorkdayService {
   }
 
   async status(workerCode: string) {
-    const worker = await prisma.worker.findUnique({ where: { code: workerCode.trim() } });
+    const worker = await prisma.worker.findUnique({ where: { code: workerCode.trim().toUpperCase() } });
 
     if (!worker) {
       throw new AppError("No existe un trabajador con ese código.", 404, "WORKER_NOT_FOUND");

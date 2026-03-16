@@ -33,4 +33,5 @@ model Workday {
   worker       Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
 
   @@index([workerId, endTime])
+  @@index([startTime])
 }
