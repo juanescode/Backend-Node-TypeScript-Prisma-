@@ -68,3 +68,6 @@ Base URL: `http://localhost:4000`
 - `404 WORKER_NOT_FOUND`: no existe ese trabajador.
 - `400 VALIDATION_ERROR`: body o parámetros inválidos.
 
+## 5) Diagrama de entidad y relación
+<img width="1402" height="710" alt="image" src="https://github.com/user-attachments/assets/dd8a15d3-a291-44ea-8ad5-4f159f073efa" />
+
