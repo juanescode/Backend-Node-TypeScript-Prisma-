@@ -12,3 +12,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Worker {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  workdays  Workday[]
+}
+
+model Workday {
+  id           Int      @id @default(autoincrement())
+  workerId     Int
+  startTime    DateTime
+  endTime      DateTime?
+  totalSeconds Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  worker       Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  @@index([workerId, endTime])
+}
