@@ -1,3 +1,7 @@
 import "dotenv/config";
+import { app } from "./app.js";
+import { env } from "./config/env.js";
 
-console.log("Back project initialized");
+app.listen(env.port, () => {
+	console.log(`Server listening on port ${env.port}`);
+});
