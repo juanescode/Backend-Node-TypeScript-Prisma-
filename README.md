@@ -61,7 +61,7 @@ Base URL: `http://localhost:4000`
   - Consulta si el trabajador tiene jornada activa.
   - Ejemplo: `GET /api/workdays/status/EMP-001`
 
-## 5) Errores
+## 4) Errores
 
 - `409 ACTIVE_WORKDAY_EXISTS`: ya tenía una jornada activa.
 - `409 ACTIVE_WORKDAY_NOT_FOUND`: intentaste cerrar sin jornada activa.
