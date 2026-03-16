@@ -68,5 +68,3 @@ Base URL: `http://localhost:4000`
 - `404 WORKER_NOT_FOUND`: no existe ese trabajador.
 - `400 VALIDATION_ERROR`: body o parámetros inválidos.
 
-## 7) Mini prueba rápida con curl
-
